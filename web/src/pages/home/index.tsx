@@ -320,10 +320,18 @@ const Home = () => {
                   max={duration}
                   step="0.01"
                   onChange={(e) => {
-                    setTime(parseInt(e.target.value));
+                    setTime(parseFloat(e.target.value));
                   }}
                   onMouseDown={() => setIsDragging(true)}
                   onMouseUp={() => {
+                    setIsDragging(false);
+                    song.currentTime = time;
+                  }}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    setIsDragging(true);
+                  }}
+                  onTouchEnd={() => {
                     setIsDragging(false);
                     song.currentTime = time;
                   }}

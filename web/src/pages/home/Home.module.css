@@ -598,6 +598,53 @@ html {
 } */
 
 @media (max-width: 1000px) {
+  #volumeBar::-webkit-slider-runnable-track {
+    width: 100px !important;
+    height: 5px;
+    border-radius: 5px;
+    background: white;
+  }
+
+  #volumeBar::-moz-range-track {
+    width: 100px !important;
+    height: 5px;
+    border-radius: 5px;
+    background: white;
+  }
+
+  #volumeBar::-webkit-slider-thumb {
+    position: relative;
+    transform: translateX(0);
+    box-sizing: content-box;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: white;
+    border: 3px solid #333;
+    left: 0;
+  }
+
+  #volumeBar::-moz-range-thumb {
+    box-sizing: content-box;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: white;
+    border: 3px solid #333;
+  }
+  #volumeBar {
+    -webkit-appearance: none; /* Remove o estilo padrão no Chrome, Edge, Opera GX */
+    -moz-appearance: none; /* Remove o estilo padrão no Firefox */
+    appearance: none; /* Remove o estilo padrão em navegadores modernos */
+    background-color: transparent !important;
+    width: 100px !important;
+    height: 5px !important;
+    writing-mode: horizontal-tb !important;
+    direction: ltr !important;
+    display: block !important;
+  }
   #songs h2 {
     z-index: 4 !important;
     padding: 40px 0 !important;
