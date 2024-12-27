@@ -253,6 +253,13 @@ const Home = () => {
 
   return (
     <div className={styles.body}>
+      <div id={styles.mobileBlock}>
+        <i className="fa-solid fa-ban"></i>
+        <h3>
+          Para a sua melhor experiência, este site só está disponível em telas
+          de computador.
+        </h3>
+      </div>
       <header id={styles.header}>
         <h1 id={styles.title}>Jump Records</h1>
       </header>
