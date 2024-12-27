@@ -162,7 +162,7 @@ html {
 
 #hbarImage div {
   width: 400px;
-  aspect-ratio: 1;
+  height: 400px;
   border-radius: 50%;
   position: relative;
   border: 5px solid #333;
@@ -300,7 +300,7 @@ html {
   text-align: center;
 }
 
-#timeline {
+/* #timeline {
   width: 100%;
   appearance: none;
   background-color: transparent;
@@ -321,6 +321,55 @@ html {
   border-radius: 50%;
   background-color: white;
   border: 3px solid #333;
+} */
+
+#timeline {
+  -webkit-appearance: none; /* Remove o estilo padrão no Chrome, Edge, Opera GX */
+  -moz-appearance: none; /* Remove o estilo padrão no Firefox */
+  appearance: none; /* Remove o estilo padrão em navegadores modernos */
+  width: 100%; /* Largura do input range */
+  background-color: transparent;
+  cursor: pointer;
+  position: relative;
+}
+
+#timeline::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 5px;
+  background: white;
+}
+
+#timeline::-moz-range-track {
+  height: 5px;
+  border-radius: 5px;
+  background: white;
+}
+
+#timeline::-webkit-slider-thumb {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  box-sizing: content-box;
+  -webkit-appearance: none; /* Necessário para permitir estilização no Chrome, Edge, Opera GX */
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: white;
+  border: 3px solid #333;
+}
+
+#timeline::-moz-range-thumb {
+  box-sizing: content-box;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: white;
+  border: 3px solid #333;
+}
+
+#timeline:focus {
+  outline: none; /* Remove o outline ao focar no input range */
 }
 
 #buttons {
@@ -354,7 +403,7 @@ html {
   display: block;
 }
 
-#volumeBar {
+/* #volumeBar {
   writing-mode: vertical-lr;
   direction: rtl;
   appearance: slider-vertical;
@@ -378,6 +427,63 @@ html {
   border-radius: 50%;
   background-color: white;
   border: 3px solid #333;
+} */
+
+#volumeBar {
+  -webkit-appearance: none; /* Remove estilo padrão no Chrome, Edge, Opera GX */
+  -moz-appearance: none; /* Remove estilo padrão no Firefox */
+  appearance: none; /* Remove estilo padrão em navegadores modernos */
+  writing-mode: vertical-lr; /* Orientação vertical do slider */
+  direction: rtl; /* Inverte direção para comportamento vertical */
+  background-color: transparent; /* Fundo transparente */
+  cursor: pointer; /* Cursor pointer para melhor UX */
+  width: 5px; /* Largura do slider */
+  height: 100px; /* Altura do slider */
+  cursor: pointer;
+  position: relative;
+  display: none;
+}
+
+#volumeBar::-webkit-slider-runnable-track {
+  width: 5px;
+  height: 100%;
+  border-radius: 5px;
+  background: white;
+}
+
+#volumeBar::-moz-range-track {
+  width: 5px;
+  height: 100%;
+  border-radius: 5px;
+  background: white;
+}
+
+#volumeBar::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Permite estilização no Chrome, Edge, Opera GX */
+  box-sizing: content-box;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: white;
+  border: 3px solid #333;
+  margin-top: -5px; /* Corrige o alinhamento do thumb */
+  position: relative; /* Necessário para alinhamento vertical correto */
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+#volumeBar::-moz-range-thumb {
+  box-sizing: content-box;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: white;
+  border: 3px solid #333;
+}
+
+/* Remover outline no foco */
+#volumeBar:focus {
+  outline: none;
 }
 
 #buttons button {
