@@ -72,20 +72,29 @@ const songs = [
 const Home = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [muted, setMuted] = useState(false);
+  const [shuffle, setShuffle] = useState(false);
+  const [loop, setLoop] = useState(false);
   const [convertedDuration, setConvertedDuration] = useState("00:00");
   const [time, setTime] = useState(0);
   const [volume, setVolume] = useState(1);
   const [volumeIcon, setVolumeIcon] = useState("high");
-  const [duration, setDuration] = useState(0);
   const [paused, setPaused] = useState(true);
   const [clickable, setClickable] = useState(true);
   const [currentSong, setCurrentSong] = useState(0);
   const [song, setSong] = useState(new Audio());
+  const [songArr, setSongArr] = useState(songs);
+  const [currentImage, setCurrentImage] = useState("");
+  const [currentTitle, setCurrentTitle] = useState("");
   const background = useRef<HTMLElement | null>(null);
   const gray = useRef<HTMLDivElement | null>(null);
   const prevCover = useRef<HTMLDivElement | null>(null);
   const currentCover = useRef<HTMLDivElement | null>(null);
   const nextCover = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    console.log(songArr);
+    console.log(currentSong);
+  }, [songArr]);
 
   useEffect(() => {
     song.volume = volume;
@@ -113,41 +122,71 @@ const Home = () => {
     song.volume = volume;
     setTime(0);
     song.addEventListener("loadedmetadata", () => {
-      setDuration(Math.floor(song.duration));
       setConvertedDuration(convertDuration(Math.floor(song.duration)));
       song.currentTime = 0;
     });
   }, [song]);
 
   useEffect(() => {
-    const newAudio = new Audio(songs[currentSong].song);
+    const newAudio = new Audio(songArr[currentSong].song);
+    newAudio.volume = song.volume;
+    newAudio.play();
+    console.log(song.duration);
     setSong(newAudio);
+    setCurrentImage(songArr[currentSong].cover);
+    setCurrentTitle(songArr[currentSong].name);
+
     if (background.current) {
       if (window.matchMedia("(max-width: 1000px)").matches) {
         background.current.style.background = `linear-gradient(to top, #333, rgba(0, 0, 0, 0.5)), 
-          url(${songs[currentSong].cover})`;
+            url(${songArr[currentSong].cover})`;
       } else {
         background.current.style.background = `linear-gradient(to right, #333, rgba(0, 0, 0, 0.5)), 
-          url(${songs[currentSong].cover})`;
+            url(${songArr[currentSong].cover})`;
       }
       background.current.style.backgroundSize = "cover";
       background.current.style.backgroundPosition = "center";
     }
   }, [currentSong]);
 
+  function toggleShuffle() {
+    if (!shuffle) {
+      const currentSongItem = songArr[currentSong];
+      const otherSongs = songArr.filter((_, index) => index !== currentSong);
+      const shuffledSongs = shuffleArray([...otherSongs]);
+      const newSongArr = [currentSongItem, ...shuffledSongs];
+      setSongArr(newSongArr);
+    } else {
+      setSongArr([...songs]);
+    }
+
+    setShuffle(!shuffle);
+  }
+
+  // Função auxiliar para embaralhar array
+  function shuffleArray<T>(array: T[]): T[] {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
   function nextSong() {
-    if (currentSong >= songs.length - 1) {
+    if (
+      songArr.findIndex((song) => song.name == currentTitle) >=
+      songArr.length - 1
+    ) {
       return 0;
     } else {
-      return currentSong + 1;
+      return songArr.findIndex((song) => song.name == currentTitle) + 1;
     }
   }
 
   function prevSong() {
-    if (currentSong <= 0) {
-      return songs.length - 1;
+    if (songArr.findIndex((song) => song.name == currentTitle) <= 0) {
+      return songArr.length - 1;
     } else {
-      return currentSong - 1;
+      return songArr.findIndex((song) => song.name == currentTitle) - 1;
     }
   }
 
@@ -158,16 +197,16 @@ const Home = () => {
   async function setNextSong() {
     if (clickable) {
       song.pause();
+
       setClickable(false);
       if (currentCover.current && nextCover.current) {
-        console.log("testeAni");
         currentCover.current.classList.toggle("currentToPrevMotion");
         nextCover.current.classList.toggle("motion");
       }
       if (gray.current) {
         gray.current.style.opacity = "1";
       }
-      await delay(500);
+      await delay(400);
       setCurrentSong(nextSong());
       if (nextCover.current) {
         nextCover.current.classList.toggle("motion");
@@ -194,7 +233,7 @@ const Home = () => {
       if (gray.current) {
         gray.current.style.opacity = "1";
       }
-      await delay(500);
+      await delay(400);
       setCurrentSong(prevSong());
       if (prevCover.current) {
         prevCover.current.classList.toggle("motion");
@@ -214,11 +253,9 @@ const Home = () => {
     if (song.paused) {
       setPaused(false);
       song.play();
-      console.log(song.currentTime);
     } else {
       setPaused(true);
       song.pause();
-      console.log(song.currentTime);
     }
   }
 
@@ -249,7 +286,19 @@ const Home = () => {
     }
   }
 
-  song.onended = setNextSong;
+  song.onended = () => {
+    if (loop) {
+      console.log(song.currentTime);
+      console.log(song.duration);
+      song.currentTime = 0;
+      song.play();
+    } else {
+      console.log(song.currentTime);
+      console.log(song.duration);
+      song.pause();
+      setNextSong();
+    }
+  };
 
   return (
     <div className={styles.body}>
@@ -309,15 +358,15 @@ const Home = () => {
           <aside>
             <img src={jumpify} />
             <div id={styles.player}>
-              <h1 id={styles.songName}>{songs[currentSong].name}</h1>
+              <h1 id={styles.songName}>{currentTitle}</h1>
               <div id={styles.time}>
-                <h3>{convertDuration(Math.floor(time))}</h3>
+                <h3>{convertDuration(Math.floor(song.currentTime))}</h3>
                 <input
                   type="range"
                   id={styles.timeline}
                   value={time}
                   min="0"
-                  max={duration}
+                  max={song.duration}
                   step="0.01"
                   onChange={(e) => {
                     setTime(parseFloat(e.target.value));
@@ -357,6 +406,7 @@ const Home = () => {
                     }}
                   />
                 </div>
+
                 <button
                   className={`${styles.skip} ${!clickable && styles.off}`}
                   onClick={() => {
@@ -381,19 +431,33 @@ const Home = () => {
                 >
                   <i className="fa-solid fa-forward-step"></i>
                 </button>
+                <div id={styles.modes}>
+                  <button
+                    className={`${styles.skip} ${loop && styles.active}`}
+                    onClick={() => setLoop(!loop)}
+                  >
+                    <i className="fa-solid fa-rotate-left"></i>
+                  </button>
+                  <button
+                    className={`${styles.skip} ${shuffle && styles.active}`}
+                    onClick={toggleShuffle}
+                  >
+                    <i className="fa-solid fa-shuffle"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </aside>
           <section ref={background}>
             <div id={styles.gray} className={styles.shown} ref={gray}></div>
             <nav className={styles.cover} ref={prevCover}>
-              <img src={songs[prevSong()].cover} />
+              <img src={songArr[prevSong()].cover} />
             </nav>
             <nav className={styles.cover} ref={currentCover}>
-              <img src={songs[currentSong].cover} />
+              <img src={currentImage} />
             </nav>
             <nav className={styles.cover} ref={nextCover}>
-              <img src={songs[nextSong()].cover} />
+              <img src={songArr[nextSong()].cover} />
             </nav>
           </section>
         </main>

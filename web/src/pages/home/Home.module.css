@@ -597,6 +597,17 @@ html {
   }
 } */
 
+#modes {
+  display: flex;
+  gap: 20px;
+  position: absolute;
+  right: 0;
+}
+
+.active {
+  color: #1ed760;
+}
+
 @media (max-width: 1000px) {
   #volumeBar::-webkit-slider-runnable-track {
     width: 100px !important;
