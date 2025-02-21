@@ -9,6 +9,7 @@ import persona from "../../assets/audios/itsJampibarNow.mp3";
 import jump from "../../assets/audios/jumpBear.mp3";
 import queen from "../../assets/audios/pepeasRhapsody.mp3";
 import fnaf from "../../assets/audios/fiveNightsAtJumps.mp3";
+import myJump from "../../assets/audios/myJump.mp3";
 import peasSigma from "../../assets/images/peasSigma.jpeg";
 import jumpify from "../../assets/images/jumpify.png";
 import hakunaPepeas from "../../assets/images/hakunaPepeas.jpeg";
@@ -20,6 +21,7 @@ import fnaj from "../../assets/images/fnaj.jpeg";
 import deJamp from "../../assets/images/deJampCover.jpeg";
 import jampibarNow from "../../assets/images/personaCover.jpeg";
 import queenCover from "../../assets/images/pepeasRhapsody.jpeg";
+import myJumpCover from "../../assets/images/myJumpCover.jpeg";
 
 const songs = [
   {
@@ -66,6 +68,11 @@ const songs = [
     name: "Last Jamp",
     cover: lastJamp,
     song: last,
+  },
+  {
+    name: "My Jamp",
+    cover: myJumpCover,
+    song: myJump,
   },
 ];
 
