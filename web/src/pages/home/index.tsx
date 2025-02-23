@@ -204,7 +204,6 @@ const Home = () => {
   async function setNextSong() {
     if (clickable) {
       song.pause();
-      console.log("t");
       setClickable(false);
       if (currentCover.current && nextCover.current) {
         currentCover.current.classList.toggle("currentToPrevMotion");
